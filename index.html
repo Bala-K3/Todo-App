@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="./logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+        body {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content: flex-start;
+            min-height:100vh;
+            padding:2rem 1rem;
+            background-color:#f4f4f4;
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding:2rem;
+            border-radius:12px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            width:100%;
+            max-width: 500px;
+        }
+        label {
+            display:block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+        input, textarea {
+            width:100%;
+            padding:0.75rem;
+            margin-bottom:1rem;
+            border:1.5px solid #ccc;
+            font-size: 1rem;
+            transition:border-color 0.2s;
+        }
+        input:focus, textarea:focus {
+            border-color: #007bff;
+            outline:none;
+        }
+        textarea {
+            min-height:80px;
+            resize:vertical;
+        }
+        span {
+            color:red;
+            font-size:0.85rem;
+            margin-top:-0.5rem;
+            margin-bottom:0.8rem;
+            display:block;
+        }
+        button {
+            width:100%;
+            padding:0.9rem;
+            font-size:1rem;
+            background-color:#007bff;
+            border:none;
+            color:#fff;
+            border-radius:8px;
+            cursor:pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .required-star {
+            color:red;
+            margin-left:4px;
+            font-weight:bold;
+            display:inline;
+        }
+        @media (max-width:600px) { 
+            form{
+                padding:1.5rem;
+            }
+            h1{
+                font-size:1.5rem;
+            }
+            input,textarea{ 
+                font-size:0.95rem;
+                padding:0.65rem;
+            }
+            button{ 
+                padding:0.8rem;
+                font-size:0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Send your Response</h1>
+    <form action="https://formsubmit.co/tgbala003@gmail.com" method="post" id="form">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="." />
+        <label for="name">Name<span class="required-star">*</span></label> 
+        <input type="text" name="name" id="name" required>
+        <span id="name-error"></span>
+
+        <label for="email">Email<span class="required-star">*</span></label>
+        <input type="email" name="email" id="email" required>
+        <span id="email-error"></span>
+
+        <label for="mobile">Mobile Number<span class="required-star">*</span></label>
+        <input type="tel" name="mobile" id="mobile" pattern="[6-9]{1}[0-9]{9}" required>
+        <span id="mobile-error"></span>
+
+        <label for="message">Message<span class="required-star">*</span></label>
+        <textarea name="message"></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded",   () => {
+
+            const form = document.getElementById('form');
+            const name = document.getElementById('name');
+            const email = document.getElementById("email");
+            const mobile = document.getElementById('mobile');
+
+            const namePattern = /^[a-zA-Z\s]+$/;
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            name.addEventListener('input', () => {
+                const nameValue = name.value.trim();
+                if (nameValue.length < 3) {
+                    document.getElementById("name-error").textContent = 'Name must be at least 3 letters';
+                    document.getElementById('name').style.border = '1.5px solid red';
+                } else if (!namePattern.test(nameValue)) {
+                    document.getElementById("name-error").textContent = 'Name must contain alphabets only';
+                    document.getElementById('name').style.borderColor = '1px solid red';
+                } else {
+                    document.getElementById("name-error").textContent = '';
+                    document.getElementById('name').style.border = '1.5px solid #007bff'
+                }
+            });
+
+            email.addEventListener('input', () => {
+                const emailValue = email.value.trim();
+                if (!emailPattern.test(emailValue)) {
+                    document.getElementById("email-error").textContent = 'Invalid email address';
+                    document.getElementById('email').style.border = '1.5px solid red';
+                } else {
+                    document.getElementById("email-error").textContent = '';
+                    document.getElementById('email').style.border = '1.5px solid #007bff';
+                }
+            });
+
+            mobile.addEventListener('input', () => {
+                const mobileValue = mobile.value.trim();
+                if (mobileValue.length !== 10 || !/^[6-9][0-9]{9}$/.test(mobileValue)) {
+                    document.getElementById("mobile-error").textContent = 'Mobile number must be 10 digits starting from 6-9';
+                    document.getElementById('mobile').style.border = '1.5px solid red';
+                } else {
+                    document.getElementById("mobile-error").textContent = '';
+                    document.getElementById('mobile').style.border = '1.5px solid #007bff';
+                }
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();  // Prevent default form submission
+                
+                let isValid = true;
+
+                const nameValue = name.value.trim();
+                const emailValue = email.value.trim();
+                const mobileValue = mobile.value.trim();
+
+                if (nameValue.length < 3 || !namePattern.test(nameValue)) {
+                    isValid = false;
+                }
+
+                if (!emailPattern.test(emailValue)) {
+                    isValid = false;
+                }
+
+                if (mobileValue.length !== 10 || !/^[6-9][0-9]{9}$/.test(mobileValue)) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Form submitted successfully!");
+                            form.reset();  // Reset the form after successful submission
+                        } else {
+                            alert("Something went wrong. Please try again.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Error: " + error.message);
+                    });
+                } else {
+                    alert("Please fix the errors in the form.");
+                }
+            });
+        });
+    </script> 
+</body>
+</html>
